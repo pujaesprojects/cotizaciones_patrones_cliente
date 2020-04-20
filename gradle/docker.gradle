@@ -3,7 +3,7 @@ jib {
         image = "adoptopenjdk:11-jre-hotspot"
     }
     to {
-        image = "docker.pkg.github.com/pujaesprojects/sor_procesos_bbva/webapp:latest"
+        image = "docker.pkg.github.com/pujaesprojects/cotizaciones_patrones_cliente/webapp:latest"
     }
     container {
         entrypoint = ["bash", "-c", "chmod +x /entrypoint.sh && sync && /entrypoint.sh"]

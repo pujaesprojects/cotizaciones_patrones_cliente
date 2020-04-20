@@ -18,11 +18,11 @@ logging:
   level:
     ROOT: DEBUG
     io.github.jhipster: DEBUG
-    edu.puj.procesobbva.sor: DEBUG
+    edu.puj.patrones.cliente: DEBUG
 
 spring:
   application:
-    name: sor-bbva
+    name: patrones-cliente
   profiles:
     active: dev
   jackson:
@@ -68,7 +68,7 @@ spring:
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: bbva-scheduling-
+      thread-name-prefix: patrones-scheduling-
       pool:
         size: 2
 

@@ -21,7 +21,7 @@ plugins {
     id "io.spring.nohttp"
 }
 
-group = 'edu.puj.procesobbva'
+group = 'edu.puj.patrones'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -55,7 +55,7 @@ idea {
 defaultTasks "bootRun"
 
 springBoot {
-    mainClassName = "edu.puj.procesobbva.sor.SorApplication"
+    mainClassName = "edu.puj.patrones.cliente.SorApplication"
 }
 
 repositories {
