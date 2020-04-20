@@ -1,0 +1,120 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://repo.spring.io/plugins-release" }
+    }
+    dependencies {
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id "com.google.cloud.tools.jib"
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "java"
+    id "maven-publish"
+    id "idea"
+    id "net.ltgt.apt-idea"
+    id "net.ltgt.apt"
+    id "io.spring.nohttp"
+}
+
+group = 'edu.puj.procesobbva'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+assert System.properties["java.specification.version"] == "1.8" || "11" || "12" || "13"
+apply from: "gradle/docker.gradle"
+apply from: "gradle/profile_dev.gradle"
+
+checkstyle {
+    toolVersion "${checkstyle_version}"
+    configFile file("checkstyle.xml")
+    checkstyleTest.enabled = false
+}
+nohttp {
+    source.include "build.gradle", "README.md"
+}
+
+configurations {
+    providedRuntime
+    implementation.exclude module: "spring-boot-starter-tomcat"
+    all {
+        resolutionStrategy {
+
+        }
+    }
+}
+
+idea {
+
+}
+
+defaultTasks "bootRun"
+
+springBoot {
+    mainClassName = "edu.puj.procesobbva.sor.SorApplication"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation platform("io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}")
+    implementation group: "io.github.jhipster", name: "jhipster-framework"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
+    implementation "com.fasterxml.jackson.core:jackson-annotations"
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.module:jackson-module-afterburner"
+    implementation "javax.annotation:javax.annotation-api"
+    implementation "javax.cache:cache-api"
+    implementation "org.hibernate:hibernate-core"
+    implementation "com.zaxxer:HikariCP"
+    implementation "org.apache.commons:commons-lang3"
+    implementation "javax.transaction:javax.transaction-api"
+    implementation "org.ehcache:ehcache"
+    implementation "org.hibernate:hibernate-jcache"
+    implementation "org.hibernate:hibernate-entitymanager"
+    implementation "org.hibernate.validator:hibernate-validator"
+    implementation "org.springframework.boot:spring-boot-loader-tools"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation ("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    implementation "org.springframework.boot:spring-boot-starter-undertow"
+
+    implementation "org.postgresql:postgresql"
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+
+    implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
+    annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+task cleanResources(type: Delete) {
+    delete "build/resources"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava.dependsOn processResources
+processResources.dependsOn bootBuildInfo
