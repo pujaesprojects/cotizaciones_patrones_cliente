@@ -25,7 +25,7 @@ jobs:
       - name: deploy via ssh
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: ./deploy
+          command: sh /home/patrones/deploy.sh
           host: ${{ secrets.HOST }}
           username: patrones
           privateKey: ${{ secrets.PRIVATE_KEY }}
