@@ -25,6 +25,11 @@ spring:
     name: patrones-cliente
   profiles:
     active: dev
+  cloud:
+    gcp:
+      project-id: javeriana
+      credentials:
+        location: classpath:service_account.json
   jackson:
     serialization:
       indent-output: true
