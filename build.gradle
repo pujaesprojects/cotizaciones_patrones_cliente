@@ -93,7 +93,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-undertow"
 
     implementation "org.postgresql:postgresql"
-    implementation 'com.github.javafaker:javafaker:1.0.2'
+    implementation ('com.github.javafaker:javafaker:1.0.2') {
+        exclude module: 'snakeyaml'
+    }
 
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
 
