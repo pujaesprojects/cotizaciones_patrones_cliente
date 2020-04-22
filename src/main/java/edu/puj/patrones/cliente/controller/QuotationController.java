@@ -81,16 +81,9 @@ public class QuotationController {
         quotation.setProductQuotations(productQuotations);
 
         log.debug("Sending info to provider topic {}", providerTopic);
-        Map<String, Object> message = new HashMap<>();
-        message.put("quotation", quotationVM);
-
-        this.providerRepository.findByTopic(providerSuscription.replace("_sub", ""))
-            .ifPresent(provider -> {
-                message.put("provider", this.providerMapper.toDto(provider));
-            });
 
         try {
-            String stringMessage = this.objectMapper.writeValueAsString(message);
+            String stringMessage = this.objectMapper.writeValueAsString(quotationVM);
             log.debug("Sending message: {}", stringMessage);
             pubsubTemplate.publish(providerTopic, stringMessage);
         } catch (JsonProcessingException e) {
