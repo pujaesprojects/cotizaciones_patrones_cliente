@@ -18,11 +18,6 @@ public class Category extends AbstractEntity {
     @Column(name = "nombre", nullable = false)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "producto_categoria",
-            joinColumns = @JoinColumn(name = "id_categoria", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_producto", referencedColumnName = "id")
-    )
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private Set<Product> products;
 }
