@@ -90,7 +90,9 @@ public class QuotationController {
             });
 
         try {
-            pubsubTemplate.publish(providerTopic, this.objectMapper.writeValueAsString(message));
+            String stringMessage = this.objectMapper.writeValueAsString(message);
+            log.debug("Sending message: {}", stringMessage);
+            pubsubTemplate.publish(providerTopic, stringMessage);
         } catch (JsonProcessingException e) {
             log.error("Error serializing message", e);
         }
