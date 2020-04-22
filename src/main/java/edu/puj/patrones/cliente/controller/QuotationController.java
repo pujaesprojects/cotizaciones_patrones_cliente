@@ -82,6 +82,8 @@ public class QuotationController {
 
         log.debug("Sending info to provider topic {}", providerTopic);
 
+        Quotation savedQuotation = this.quotationRepository.save(quotation);
+        quotationVM.setId(savedQuotation.getId());
         try {
             String stringMessage = this.objectMapper.writeValueAsString(quotationVM);
             log.debug("Sending message: {}", stringMessage);
@@ -89,9 +91,6 @@ public class QuotationController {
         } catch (JsonProcessingException e) {
             log.error("Error serializing message", e);
         }
-
-        Quotation savedQuotation = this.quotationRepository.save(quotation);
-        quotationVM.setId(savedQuotation.getId());
         return ResponseEntity.ok(quotationVM);
     }
 }

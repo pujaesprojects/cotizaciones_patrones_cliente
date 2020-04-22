@@ -3,7 +3,7 @@ package edu.puj.patrones.cliente.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
-import edu.puj.patrones.cliente.dto.QuotationDTO;
+import edu.puj.patrones.cliente.controller.vm.QuotationVM;
 import edu.puj.patrones.cliente.dto.QuotationEmailDTO;
 import edu.puj.patrones.cliente.mapper.ProviderMapper;
 import edu.puj.patrones.cliente.repository.ProductRepository;
@@ -36,11 +36,11 @@ public class QuotationService {
         this.objectMapper = objectMapper;
     }
 
-    public void sendQuotation(QuotationDTO quotationDTO) {
+    public void sendQuotation(QuotationVM quotationVM) {
         Faker faker = new Faker(new Locale("es"));
 
         QuotationEmailDTO quotationEmail = new QuotationEmailDTO();
-        quotationEmail.setQuotation(quotationDTO);
+        quotationEmail.setQuotation(quotationVM);
         this.providerRepository.findByTopic(providerSubscription.replace("_sub", ""))
             .ifPresent(provider -> {
                 quotationEmail.setProvider(this.providerMapper.toDto(provider));
@@ -54,10 +54,12 @@ public class QuotationService {
         log.info("Message arrived!: {}",  payload);
 
         try {
-            QuotationDTO quotationProvider  = objectMapper.readValue(payload, QuotationDTO.class);
-            this.sendQuotation(quotationProvider);
+            QuotationVM quotation = objectMapper.readValue(payload, QuotationVM.class);
+            this.sendQuotation(quotation);
         } catch (JsonProcessingException e) {
             log.error("Error parseando el mensaje", e);
+        } catch (Exception e) {
+            log.error("No se pudo enviar el mensaje de correo", e);
         }
     }
 }
