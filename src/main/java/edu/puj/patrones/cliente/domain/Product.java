@@ -27,6 +27,6 @@ public class Product extends AbstractEntity {
     @JoinColumn(name = "proveedor", nullable = false)
     private Provider provider;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "products")
-    private Set<Category> categories;
+    //@ManyToMany(fetch = FetchType.LAZY, mappedBy = "products")
+    //private Set<Category> categories;
 }
