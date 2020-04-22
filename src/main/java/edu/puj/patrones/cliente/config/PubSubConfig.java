@@ -70,7 +70,6 @@ public class PubSubConfig {
     @Bean
     @ServiceActivator(inputChannel = "pvOutputChannel")
     public MessageHandler messageSender(PubSubTemplate pubsubTemplate) {
-        pubsubTemplate.publish(providerTopic, "Hiiii");
         return new PubSubMessageHandler(pubsubTemplate, providerTopic);
     }
 }

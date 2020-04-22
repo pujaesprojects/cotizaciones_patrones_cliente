@@ -27,6 +27,9 @@ public class Provider extends AbstractEntity {
     @Column(name = "telefono")
     private String phone;
 
+    @Column(name = "topico")
+    private String topic;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "provider")
     private Set<Product> products;
 }

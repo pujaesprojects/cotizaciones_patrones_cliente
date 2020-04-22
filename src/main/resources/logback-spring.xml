@@ -34,7 +34,7 @@
     <logger name="com.sun" level="WARN"/>
     <logger name="com.google" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
-    <logger name="io.grpc.Context" level="WARN"/>
+    <logger name="io.grpc" level="INFO"/>
     <logger name="io.opencensus" level="WARN"/>
     <logger name="io.perfmark.PerfMark" level="WARN"/>
     <logger name="io.undertow" level="WARN"/>

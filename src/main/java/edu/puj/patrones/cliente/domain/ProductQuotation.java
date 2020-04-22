@@ -1,5 +1,6 @@
 package edu.puj.patrones.cliente.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,12 +21,13 @@ public class ProductQuotation extends AbstractEntity {
     private static final long serialVersionUID = 5258602909618529963L;
 
     @Column(name = "cantidad")
-    private Integer count;
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto")
     private Product product;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cotizacion")
     private Quotation quotation;
