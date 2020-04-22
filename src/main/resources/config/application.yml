@@ -83,3 +83,10 @@ server:
     session:
       cookie:
         http-only: true
+
+client:
+  topic: cliente
+
+provider:
+  subscription: pepito_sub
+  topic: proveedores

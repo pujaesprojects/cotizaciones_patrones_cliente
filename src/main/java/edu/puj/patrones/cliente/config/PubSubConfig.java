@@ -2,6 +2,7 @@ package edu.puj.patrones.cliente.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gcp.pubsub.core.PubSubTemplate;
 import org.springframework.cloud.gcp.pubsub.integration.inbound.PubSubInboundChannelAdapter;
 import org.springframework.cloud.gcp.pubsub.integration.outbound.PubSubMessageHandler;
@@ -15,13 +16,35 @@ import org.springframework.messaging.MessageHandler;
 @Slf4j
 @Configuration
 public class PubSubConfig {
+    @Value("${client.topic}")
+    private String clientTopic;
+
+    @Value("${provider.topic}")
+    private String providerTopic;
+
+    @Value("${provider.subscription}")
+    private String providerSubscription;
+
+
     @Bean
     public PubSubInboundChannelAdapter messageChannelAdapter(
         @Qualifier("pvInputChannel") MessageChannel inputChannel,
         PubSubTemplate pubSubTemplate
     ) {
         PubSubInboundChannelAdapter adapter =
-            new PubSubInboundChannelAdapter(pubSubTemplate, "proveedor_sub");
+            new PubSubInboundChannelAdapter(pubSubTemplate, providerSubscription);
+        adapter.setOutputChannel(inputChannel);
+
+        return adapter;
+    }
+
+    @Bean
+    public PubSubInboundChannelAdapter clientMessageChannelAdapter(
+            @Qualifier("clInputChannel") MessageChannel inputChannel,
+            PubSubTemplate pubSubTemplate
+    ) {
+        PubSubInboundChannelAdapter adapter =
+                new PubSubInboundChannelAdapter(pubSubTemplate, clientTopic + "_sub");
         adapter.setOutputChannel(inputChannel);
 
         return adapter;
@@ -33,14 +56,21 @@ public class PubSubConfig {
         return new DirectChannel();
     }
 
+    @Bean
+    @Qualifier("clInputChannel")
+    public MessageChannel clInputChannel() {
+        return new DirectChannel();
+    }
+
     @ServiceActivator(inputChannel = "pvInputChannel")
     public void messageReceiver(String payload) {
-        log.info("Message arrived! Payload: " + payload);
+        log.info("Message arrived! {}: {}", providerSubscription,  payload);
     }
 
     @Bean
     @ServiceActivator(inputChannel = "pvOutputChannel")
     public MessageHandler messageSender(PubSubTemplate pubsubTemplate) {
-        return new PubSubMessageHandler(pubsubTemplate, "proveedores");
+        pubsubTemplate.publish(providerTopic, "Hiiii");
+        return new PubSubMessageHandler(pubsubTemplate, providerTopic);
     }
 }
