@@ -62,11 +62,6 @@ public class PubSubConfig {
         return new DirectChannel();
     }
 
-    @ServiceActivator(inputChannel = "pvInputChannel")
-    public void messageReceiver(String payload) {
-        log.info("Message arrived! {}: {}", providerSubscription,  payload);
-    }
-
     @Bean
     @ServiceActivator(inputChannel = "pvOutputChannel")
     public MessageHandler messageSender(PubSubTemplate pubsubTemplate) {

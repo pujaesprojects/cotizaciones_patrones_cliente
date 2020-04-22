@@ -77,10 +77,12 @@ public class EmailService {
     }
 
     private String replaceTemplateParams(HashMap<String, Object> params) {
-        String template = getMessageTemplate();
+        var ref = new Object() {
+            String template = getMessageTemplate();
+        };
         params.forEach((param, value) -> {
-            template.replaceAll(String.format("#%s#", param), value.toString());
+            ref.template = ref.template.replaceAll(String.format("#%s#", param), value.toString());
         });
-        return template;
+        return ref.template;
     }
 }
